@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Ritual — Routine & Habit Tracker</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="mark">Ritual<span>.</span></div>
+      <div class="sub">plan the day, tend the habit, close the loop</div>
+    </div>
+    <div class="today-date" id="dateDisplay"></div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-view="today">Today</button>
+    <button class="tab-btn" data-view="tomorrow">Tomorrow</button>
+    <button class="tab-btn" data-view="habits">Habits</button>
+    <button class="tab-btn" data-view="notes">Notes</button>
+    <button class="tab-btn" data-view="history">History</button>
+  </nav>
+
+  <!-- TODAY -->
+  <section class="view active" id="view-today">
+    <div class="section-head">
+      <h2>Today's routine</h2>
+      <span class="count" id="todayCount">0/0</span>
+    </div>
+    <div class="card">
+      <div id="todayList"></div>
+      <div class="add-row">
+        <input type="time" id="todayTime" value="09:00">
+        <input type="text" id="todayText" placeholder="Add something to do…">
+        <button class="btn btn-gold" onclick="addTask('today')">Add</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOMORROW -->
+  <section class="view" id="view-tomorrow">
+    <div class="section-head">
+      <h2>Plan tomorrow</h2>
+      <span class="count" id="tomorrowCount">0/0</span>
+    </div>
+    <div class="card">
+      <div id="tomorrowList"></div>
+      <div class="add-row">
+        <input type="time" id="tomorrowTime" value="09:00">
+        <input type="text" id="tomorrowText" placeholder="Schedule something for tomorrow…">
+        <button class="btn btn-gold" onclick="addTask('tomorrow')">Add</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HABITS -->
+  <section class="view" id="view-habits">
+    <div class="section-head">
+      <h2>Habits</h2>
+      <span class="count" id="habitsCount">0/0 today</span>
+    </div>
+    <div class="habit-grid" id="habitGrid"></div>
+    <div class="card add-habit-form">
+      <input type="text" id="habitEmoji" placeholder="🔥" maxlength="2">
+      <input type="text" id="habitName" placeholder="New habit name…">
+      <button class="btn btn-gold" onclick="addHabit()">Add habit</button>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="view" id="view-notes">
+    <div class="section-head">
+      <h2>Notes</h2>
+      <span class="count" id="notesCount">0</span>
+    </div>
+    <div class="card">
+      <textarea id="noteInput" placeholder="Jot a thought, an idea, anything…"></textarea>
+      <div class="add-row"><button class="btn btn-gold" onclick="addNote()">Save note</button></div>
+    </div>
+    <div id="notesList"></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="view" id="view-history">
+    <div class="section-head">
+      <h2>Closed days</h2>
+      <span class="count" id="historyCount">0</span>
+    </div>
+    <div class="card"><div id="historyList"></div></div>
+  </section>
+</div>
+
+<div class="bottom-bar">
+  <div class="bb-inner">
+    <div class="bb-stats">
+      <span>Routine <b id="bbRoutine">0/0</b></span>
+      <span>Habits <b id="bbHabits">0/0</b></span>
+    </div>
+    <button class="end-day-btn" onclick="openEndDay()">End Day →</button>
+  </div>
+</div>
+
+<!-- END DAY OVERLAY -->
+<div class="overlay" id="endDayOverlay">
+  <div class="overlay-card">
+    <div id="endDayForm">
+      <h2>Close today</h2>
+      <div class="sub" id="overlayDateSub"></div>
+      <div class="rings">
+        <div class="ring-wrap">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#262b3b" stroke-width="8"/>
+            <circle id="ringRoutine" cx="48" cy="48" r="42" fill="none" stroke="#e8b559" stroke-width="8" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/>
+          </svg>
+          <div class="ring-label"><span class="pct" id="ringRoutinePct">0%</span><span class="cap">Routine</span></div>
+        </div>
+        <div class="ring-wrap">
+          <svg width="96" height="96" viewBox="0 0 96 96">
+            <circle cx="48" cy="48" r="42" fill="none" stroke="#262b3b" stroke-width="8"/>
+            <circle id="ringHabits" cx="48" cy="48" r="42" fill="none" stroke="#6fae8a" stroke-width="8" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/>
+          </svg>
+          <div class="ring-label"><span class="pct" id="ringHabitsPct">0%</span><span class="cap">Habits</span></div>
+        </div>
+      </div>
+      <textarea id="reflectionInput" placeholder="One line about today (optional)…"></textarea>
+      <div class="overlay-actions">
+        <button class="btn btn-ghost" onclick="closeOverlay()">Cancel</button>
+        <button class="btn btn-gold" onclick="confirmEndDay()">Close day</button>
+      </div>
+    </div>
+    <div class="closed-msg" id="closedMsg">
+      <div class="flame">🕯️</div>
+      <h2>Day closed</h2>
+      <div class="sub" id="closedSummary"></div>
+      <div class="overlay-actions" style="margin-top:18px;">
+        <button class="btn btn-gold" style="flex:1" onclick="closeOverlay()">Done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
